@@ -468,15 +468,12 @@
   startBounce();
 
   /* ========================= Proactive teaser bubble =================== */
+  // Per explicit request: the teaser hides as soon as the chat card opens
+  // (auto-hide-on-open), rather than the skill's default persistent behaviour
+  // of repositioning above the open card.
   var teaserDismissed = false;
-  var CARD_BOTTOM_OFFSET = 96; // must match #ccvh-card's CSS `bottom` value
-  var TEASER_CARD_GAP = 12;
   function positionTeaser(){
-    if (card.classList.contains("ccvh-open")) {
-      teaser.style.bottom = (CARD_BOTTOM_OFFSET + card.offsetHeight + TEASER_CARD_GAP) + "px";
-    } else {
-      teaser.style.bottom = "92px";
-    }
+    teaser.style.bottom = "92px";
   }
   setTimeout(function(){
     if (teaserDismissed) return;
@@ -496,11 +493,11 @@
   /* ============================ Open / close ============================ */
   function openCard(){
     card.classList.add("ccvh-open");
-    positionTeaser();
+    teaserDismissed = true;
+    teaser.style.display = "none";
   }
   function closeCard(){
     card.classList.remove("ccvh-open");
-    positionTeaser();
   }
   launcher.addEventListener("click", function(){
     if (card.classList.contains("ccvh-open")) { closeCard(); } else { openCard(); }
