@@ -622,7 +622,7 @@
     {
       id: "symptom",
       priority: 1,
-      triggers: ["fever","temperature","limping","lame","itchy","itching","rash","not eating","off his food","off her food","off food","diarrhea","diarrhoea","lethargic","lethargy","coughing","cough","sneezing","discharge","swelling","lump","not himself","not herself","not himself/herself","unwell","not right","not well"],
+      triggers: ["fever","temperature","limping","lame","itchy","itching","rash","not eating","isn't eating","isnt eating","wont eat","won't eat","not hungry","loss of appetite","off his food","off her food","off food","diarrhea","diarrhoea","lethargic","lethargy","coughing","cough","sneezing","discharge","swelling","lump","not himself","not herself","not himself/herself","unwell","not right","not well"],
       handle: function(){
         return {
           text: "I'm not able to diagnose over chat, but that's worth having one of our vets take a look at. You can book online or call us on " + CCVH_CONFIG.phone + ". If things get worse quickly, please treat it as an emergency and call us straight away.",
@@ -641,19 +641,27 @@
     {
       id: "hours",
       priority: 2,
-      triggers: ["hours","opening hours","open today","what time","when are you open","when do you close","public holiday","weekend hours","saturday","sunday"],
+      triggers: ["hours","opening hours","open today","open now","are you open","what time","when are you open","when do you close","public holiday","weekend hours","saturday","sunday"],
       handle: function(){ return { text: CCVH_CONFIG.hoursText + ". " + statusLine() }; }
     },
     {
       id: "location",
       priority: 2,
-      triggers: ["location","address","where are you","directions","find you","parking"],
+      triggers: ["location","address","where are you","where is your","where is the clinic","how do i get to you","how do i find you","directions","find you","parking","clinic located"],
       handle: function(){
         var parkingLine = CCVH_CONFIG.parkingInfo ? CCVH_CONFIG.parkingInfo : "We don't have parking details published yet — give us a call on " + CCVH_CONFIG.phone + " and we'll help you find a spot.";
         return {
           text: "We're at " + CCVH_CONFIG.address + ". " + parkingLine,
           links: [{ label: "📍 Get Directions", href: mapsUrl }]
         };
+      }
+    },
+    {
+      id: "service-area",
+      priority: 3,
+      triggers: ["suburbs","service area","which areas","do you service","areas you cover","areas do you cover"],
+      handle: function(){
+        return { text: "We regularly see pets from Cranbourne, Cranbourne East, West, South and North, Clyde, Lynbrook, Seaford, Skye, Devon Meadows, Botanic Ridge, Sandhurst, and surrounding areas." };
       }
     },
     {
@@ -670,9 +678,9 @@
     {
       id: "doctors",
       priority: 2,
-      triggers: ["doctors","vets","veterinarians","how many vets","who are the vets","which vet"],
+      triggers: ["doctors","vets","veterinarians","how many vets","who are the vets","which vet","versteege","yuen lim","sgargetta","man yi leong","melody hui","elizabeth doran","tania mcguire","is dr","dr available","dr working"],
       handle: function(){
-        return { text: "We have 7 vets, each with 10+ years' experience: Dr Leanne Versteege (Clinical Director), Dr Yuen Lim, Dr Cybil Sgargetta, Dr Man Yi Leong, Dr Melody Hui, Dr Elizabeth Doran, and Dr Tania McGuire." };
+        return { text: "We have 7 vets, each with 10+ years' experience: Dr Leanne Versteege (Clinical Director), Dr Yuen Lim, Dr Cybil Sgargetta, Dr Man Yi Leong, Dr Melody Hui, Dr Elizabeth Doran, and Dr Tania McGuire. For a specific vet's availability on a given day, please call us on " + CCVH_CONFIG.phone + " or book online." };
       }
     },
     {
@@ -697,6 +705,54 @@
       triggers: ["dental","dentistry","teeth","tooth","gum disease"],
       handle: function(){
         return { text: "Yes — alongside routine dental cleans, we also provide advanced dentistry for more complex dental disease affecting the roots, bone, or gums." };
+      }
+    },
+    {
+      id: "imaging",
+      priority: 2,
+      triggers: ["x ray","xray","x-ray","ultrasound","ct scan","mobile ct","imaging","scan my","blood test","blood work","blood testing","in house lab","in-house lab","test results","fiv test","fiv testing"],
+      handle: function(){
+        return { text: "Yes — we have in-house digital X-ray and ultrasound, mobile CT access for complex cases, in-house blood testing (results in around 15 minutes), and in-clinic FIV testing." };
+      }
+    },
+    {
+      id: "surgery",
+      priority: 3,
+      triggers: ["surgery","operation","surgical","abdominal surgery"],
+      handle: function(){
+        return { text: "Yes — we perform in-house surgery, from routine procedures through to more complex abdominal operations, plus advanced surgery for tougher cases." };
+      }
+    },
+    {
+      id: "vaccination",
+      priority: 3,
+      triggers: ["vaccination","vaccine","vaccinate","booster","rhdv","calicivirus"],
+      handle: function(){
+        return { text: "Yes — we provide vaccinations and preventative care for dogs and cats, and we vaccinate rabbits against RHDV using Filavac." };
+      }
+    },
+    {
+      id: "behaviour",
+      priority: 3,
+      triggers: ["behaviour","behavior","anxiety","aggression","aggressive","noise phobia","separation anxiety","training"],
+      handle: function(){
+        return { text: "Yes — we offer behaviour guidance and practical strategies for things like separation anxiety, noise sensitivity and aggression, with medication support where needed." };
+      }
+    },
+    {
+      id: "rehab",
+      priority: 3,
+      triggers: ["rehabilitation","rehab","lameness","mobility","recovery","diabetic","diabetes","puppy school","puppy pre-school","puppy preschool"],
+      handle: function(){
+        return { text: "Yes — our allied health services cover rehabilitation for lameness, stiffness and post-surgical recovery, a diabetic clinic, and puppy pre-school for new owners." };
+      }
+    },
+    {
+      id: "end-of-life",
+      priority: 3,
+      triggers: ["end of life","euthanasia","put down","put to sleep","pass away","quality of life"],
+      handle: function(){
+        return { text: "We offer compassionate end-of-life care and support during this difficult decision. Please call us on " + CCVH_CONFIG.phone + " to talk it through with our team." };
       }
     },
     {
@@ -781,6 +837,38 @@
       triggers: ["rabbit","guinea pig","ferret","exotic","small pet"],
       handle: function(){
         return { text: "Yes — alongside dogs and cats, we routinely see rabbits, guinea pigs and ferrets, including consultations, procedures, and RHDV vaccination for rabbits." };
+      }
+    },
+    {
+      id: "cat-friendly",
+      priority: 3,
+      triggers: ["cat friendly","cat-friendly","stress free for cats","reduce stress for cats","gold standard"],
+      handle: function(){
+        return { text: "Yes — we're an ISFM Gold Standard Cat Friendly Clinic (since 2019), the highest accreditation level from the International Society of Feline Medicine, so we take extra care to keep cats calm and comfortable." };
+      }
+    },
+    {
+      id: "ai-tech",
+      priority: 3,
+      triggers: ["ai technology","use ai","artificial intelligence","ai scribe","covet","imagyst"],
+      handle: function(){
+        return { text: "Yes — we use CoVet AI scribe software and the IDEXX Imagyst AI-assisted microscope, which helps evaluate blood smears, skin lump samples and fine needle aspirates quickly." };
+      }
+    },
+    {
+      id: "greeting",
+      priority: 4,
+      triggers: ["hello","hi there","hiya","good morning","good afternoon"],
+      handle: function(){
+        return { text: "Hi there! Ask me about hours, booking, services, pricing, or anything else about visiting us.", suggestions: ["What are your opening hours?", "How do I book an appointment?", "What services do you offer?"] };
+      }
+    },
+    {
+      id: "thanks",
+      priority: 4,
+      triggers: ["thanks","thank you","cheers","appreciate it"],
+      handle: function(){
+        return { text: "You're welcome! Let us know if there's anything else we can help with." };
       }
     }
   ];
@@ -886,6 +974,7 @@
     if (params.get("ccvhtest") !== "1") return;
 
     window.CCVH_TEST = {
+      ask: function(msg){ var m = matchMessage(msg); return { id: m.id, text: m.result.text }; },
       runAll: function(){
         var cases = [
           { name: "species pricing - cat consult", input: "how much for a cat consult", expectIntentId: "pricing", expectContains: ["Pricing isn't published"] },
@@ -900,7 +989,11 @@
           { name: "emergency false-positive guard - blood tests", input: "do you do blood tests?", expectIntentId: null, expectNotContainsIntent: "emergency" },
           { name: "emergency false-positive guard - running late", input: "sorry, running late arriving", expectIntentId: null, expectNotContainsIntent: "emergency" },
           { name: "booking", input: "how do I book an appointment", expectIntentId: "booking", expectContains: ["book online"] },
-          { name: "not-offered service - boarding", input: "do you offer boarding", expectIntentId: "boarding", expectContains: ["isn't currently"] }
+          { name: "not-offered service - boarding", input: "do you offer boarding", expectIntentId: "boarding", expectContains: ["isn't currently"] },
+          { name: "imaging - xray", input: "do you offer xray?", expectIntentId: "imaging", expectContains: ["X-ray"] },
+          { name: "imaging - blood test", input: "can you do a blood test", expectIntentId: "imaging", expectContains: ["blood testing"] },
+          { name: "surgery", input: "do you do surgery", expectIntentId: "surgery", expectContains: ["surgery"] },
+          { name: "vaccination", input: "do you do vaccinations", expectIntentId: "vaccination", expectContains: ["vaccinations"] }
         ];
         var pass = 0, fail = 0;
         cases.forEach(function(c){
